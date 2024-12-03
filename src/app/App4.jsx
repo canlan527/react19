@@ -47,7 +47,9 @@ ErrorBoundary.propTypes = {
 
 // 实现use
 function use(promise) {
-  console.log('use')
+  // if(!(promise instanceof Promise)) {
+  //   return promise;
+  // }
   switch (promise.status) {
     case 'fulfilled':
       return promise.value;
