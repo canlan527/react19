@@ -42,7 +42,7 @@ export default function App() {
   const dataA = fetchDataByTime(3000)
   const dataB = fetchDataByTime(6000)
   const dataC = fetchDataByTime(9000)
-
+  // 以下组件会根据时间依次加载
   return <Suspense fallback={<p>loading...</p>}>
     <ComponentA data={dataA} />
     <Suspense fallback={<p>loading...</p>}>
@@ -53,3 +53,7 @@ export default function App() {
     </Suspense>
   </Suspense>
 }
+
+/**
+ * Suspense组件可以嵌套使用，管理不同子树的挂起状态
+ */
