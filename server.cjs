@@ -14,5 +14,12 @@ app.get('/user/:userId', (req, res) => {
   })
 })
 
+app.get('/search', (req, res) => {
+  const keyword = req.query.keyword;
+  setTimeout(() => {
+    const results = Array.from({length:10}, (v, i) => `${i+1}-${keyword}`) 
+    res.json(results)
+  }, 600) 
+})
 
 app.listen(3300, () => console.log('server is running on port 3300'))
