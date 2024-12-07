@@ -16,18 +16,19 @@ function fecthSearchData(keyword) {
   return promise
 }
 
-function SearchResult({promise}) {
+function SearchResult({ promise }) {
   const results = use(promise)
   return (
     <ul>
       {
-        results.map((item,index) => (
+        results.map((item, index) => (
           <li key={index}>{item}</li>
         ))
       }
     </ul>
   )
 }
+
 
 export default function App() {
   // 搜索关键词
@@ -37,20 +38,20 @@ export default function App() {
   // input change方法
   const handleChange = (keyword) => {
     // 判断并取消发送请求
-    if(searchPromise?.controller) {
+    if (searchPromise?.controller) {
       searchPromise.controller.abort();
     }
     // 设置关键词
     setKeyword(keyword)
     // 发送请求
-    setSearchPromise(keyword.trim()? fecthSearchData(keyword): null)
+    setSearchPromise(keyword.trim() ? fecthSearchData(keyword) : null)
   }
 
   return (
     <>
       <h1>搜索列表</h1>
       <input type="text" value={keyword} onChange={(e) => handleChange(e.target.value)} />
-      { keyword && 
+      {keyword &&
         <Suspense fallback={<p>正在搜索{keyword}....</p>}>
           <SearchResult promise={searchPromise} />
         </Suspense>
