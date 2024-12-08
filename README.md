@@ -112,3 +112,8 @@ useRef用于管理不参与组件渲染流程的可变引用。
 # useImperativeHandle
 - 用于自定义通过 ref 暴露给父组件的实例值或方法，让父组件可以通过 ref 访问子组件中自定义的值或方法，而不仅仅 DOM 节点。
 
+# createContext
+- 通过 createContext 创建上下文，可以直接使用返回的对象包裹要通信的子组件们，也可以.Provider API。
+
+- 在子组件中可以通过use使用context
+
