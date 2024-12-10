@@ -126,3 +126,52 @@ useRef用于管理不参与组件渲染流程的可变引用。
 - 用于控制更新优先级，允许将某些更新标记为“过度任务”(Transition)。
 - 通过将任务分为高优先级和低优先级，可以提升用户体验，尤其是在处理复杂耗时的更新时。
 
+# FormAction
+FormAction的 action 属性类似于传统 HTML 表单的 action，但它接受的一个函数而不是URL。
+**自动处理FormData**
+- 当表单提交时，React会自动创建 FormData对象
+- 不需要手动调用 preventDefault()
+- 不需要手动收集表单数据
+有了FormData可以讲数据访问简化
+# useFormStatus
+用于获取表单的提交状态。它返回一个对象，其中包含pending属性，表示表单是否正在提交。
+useFormStatus钩子函数没有参数
+```jsx
+const { pending, data, method, action } = useFormStatus();
+```
+## 参数信息：
+`pending`：布尔值。如果form表单正在执行提交操作，就为true。否则为false
+`data`：一个`FormData`接口对象的实现，包含了表单提交的data值。如果没有正在提交的表单，或者上级标签没有<form>，则为null
+`method`：一个`get`或 `post`字符串值。代表form正在用`get`或者`post`这种http方法提交。默认`get`,并且可以通过这个参数指定方法。
+`action`：一个传递<form>表单action属性的方法引用。如果没有<form>元素，则值为null；如果值是一个`URI`，或者没有指定action属性值， `status.action`将会是null。
+
+## 注意：
+1. useFormStatus钩子函数必须被一个<form>元素内部渲染的组件调用。
+2. useFormStatus将只返回form表单的状态信息。不会返回在 同一个组件或子组件中 渲染的任何 <form> 表单的状态信息
+
+# useActionState
+用于在表单提交后处理状态。
+它返回一个对象，其中包含 data 和 error 属性，分别表示表单提交后的数据和错误信息。
+在组件的顶层调用 useActionState 即可创建一个随 表单动作被调用 而更新的 state。
+```jsx
+const [state, formAction, isPending] = useActionState(fn, initialState, permalink?);
+```
+## 参数
+
+在调用 useActionState 时在参数中传入现有的表单动作函数`fn`以及一个初始状态`{}`，无论表单action后是否在 pending 中，它都会返回一个新的 `action` 函数和一个 `form state` 以供在 form 中使用。
+这个新的 form state 也会作为参数传入提供的表单动作函数。
+
+form state 是一个只在表单被提交触发 action 后才会被更新的值。如果该表单没有被提交，该值会保持传入的初始值不变。
+
+## 返回值
+useActionState返回一个包含以下值的数组：
+
+1. 当前的 state。第一次渲染期间，该值为传入的初始状态的参数值。在 action 被调用后该值会变为action动作函数的返回值。
+2. 一个新的 action 函数，用于在你的 form 组件的 action 参数或在表单中子组件的 formAction 参数中传递。
+3. 一个 isPending 标识，用于表明是否有正在 pending 的 Transition。
+
+## 注意
+- 在支持 React 服务器组件的框架中使用该功能时，useActionState 允许表单在服务器渲染阶段时获得部分交互性。当不使用服务器组件时，它的特性与本地 state 相同。
+- 与直接通过表单动作调用的函数不同，传入 useActionState 的函数被调用时，会多传入一个代表 state 的上一个值或初始值的参数作为该函数的第一个参数。
+![alt text](image.png)
+
