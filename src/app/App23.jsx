@@ -6,8 +6,10 @@ export default function App() {
     params: 
       1. 函数：代表表单状态与
       2. 对象：代表state的初始状态
-    
-   
+    returns:
+      1. state:表单状态
+      2. formAction:表单提交的动作
+      3. pending:表单提交挂起的过渡
    */
   const [state, formAction, pending] = useActionState(async (currentState, formData) => {
     const username = formData.get('username')
