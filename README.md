@@ -179,3 +179,26 @@ useActionState返回一个包含以下值的数组：
 表单被提交后，传入的 action 函数会被执行，返回值将会作为该表单的新的当前state。
 传入的 action 接受到的第一个参数将会变为该表单的当前state。当表单第一次被提交时将会传入提供的初始state，只会都将传入上一次调用action函数的返回值。
 
+# useOpitimistic
+此钩子函数专门用于处理**乐观更新**的场景，乐观更新是一种优化技术，用于在用户与界面交互时，立即更新UI，从而提供更流畅的体验，而无需等待后端的响应。
+
+```jsx
+const [optimisticState, addOptimistic] = useOptimistic(stateValue, reducerFn)
+
+```
+## 参数
+1. 一个通过useState返回值state值，就是要乐观更新的值。
+2. 一个reducer函数，类似于redux里的函数，函数体中有返回的对象。
+   - 参数1: state
+   - 参数2: action对象
+
+## 返回值
+1. `optimisticState`: 是reducer函数中返回的对象，也代表你替换了原state值的乐观更新值。
+2. `addOptimistic`: 派发器。
+   - 类似redux中的`dispatch`。
+   - 可以通过派发不通的 type 和携带的value值，进入reducer函数中走不通的条件语句，从而返回不同的对象。
+
+## 注意
+- 乐观更新后，渲染的jsx中使用的是 `optimisticState`，而不是一开始的state值。
+- 为了确保出错后可以回退到原来的值，通常和 `useTransition` 一起使用。 `addOptimistic` 的操作通常在 `startTransition` 的参数函数内。
+- 提供错误边界。使用`try catch`完善错误情况。
