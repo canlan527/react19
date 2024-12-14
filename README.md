@@ -202,3 +202,68 @@ const [optimisticState, addOptimistic] = useOptimistic(stateValue, reducerFn)
 - 乐观更新后，渲染的jsx中使用的是 `optimisticState`，而不是一开始的state值。
 - 为了确保出错后可以回退到原来的值，通常和 `useTransition` 一起使用。 `addOptimistic` 的操作通常在 `startTransition` 的参数函数内。
 - 提供错误边界。使用`try catch`完善错误情况。
+
+# React Compiler
+新的编译器，用于在构建阶段自动优化React应用程序。
+可以在不重写代码，就可以实现对组件和钩子中的值或者值组进行自动记忆化处理，减少不必要的计算，提升应用性能。
+
+包括两部分：
+- 编译器
+- 代码检查工具
+
+## 安装
+```bash
+yarn add -D babel-plugin-react-compiler@beta eslint-plugin-react-compiler@beta
+```
+编译器包含一个 Babel 插件，你可以在构建流水线中使用它来运行编译器。
+
+## eslint-plugin-react-compiler
+是一个 eslint 插件，用于在代码审查和开发过程中检测和修复不符合 react compiler 的规则的问题。
+
+```js
+const ReactCompilerConfig = { /* ... */ };
+
+export default defineConfig(() => {
+  return {
+    plugins: [
+      react({
+        babel: {
+          plugins: [
+            ["babel-plugin-react-compiler", ReactCompilerConfig],
+          ],
+        },
+      }),
+    ],
+    // ...
+  };
+});
+```
+
+## babel-plugin-react-compiler
+React Compiler的babel插件，用于在构建过程中自动优化 React 应用程序。
+
+```js
+// vite.config.js
+const ReactCompilerConfig = { /* ... */ };
+// https://vite.dev/config/
+export default defineConfig({
+  plugins: [
+    react({
+      babel: {
+        plugins: [
+          ["babel-plugin-react-compiler", ReactCompilerConfig],
+        ]
+      }
+    })
+  ],
+})
+
+```
+
+## react-compiler-healthcheck
+可以帮助开发者分析代码库是否符合 ReactCompiler 的优化要求
+
+```
+npx react-compiler-healthcheck
+```
+![alt text](image.png)
